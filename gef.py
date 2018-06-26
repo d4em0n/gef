@@ -145,6 +145,13 @@ else:
     raise Exception("WTF is this Python version??")
 
 
+def gef_print(x="", *args, **kwargs):
+    """Wrapper around print(), using string buffering feature."""
+    if __gef_int_stream_buffer__ and not is_debug():
+        return __gef_int_stream_buffer__.write(x + kwargs.get("end", "\n"))
+    return print(x, *args, **kwargs)
+
+
 def http_get(url):
     """Basic HTTP wrapper for GET request. Return the body of the page if HTTP code is OK,
     otherwise return None."""
@@ -293,13 +300,6 @@ def reset_all_caches():
         if hasattr(obj, "cache_clear"):
             obj.cache_clear()
     return
-
-
-def gef_print(x="", *args, **kwargs):
-    """Wrapper around print(), using string buffering feature."""
-    if __gef_int_stream_buffer__ and not is_debug():
-        return __gef_int_stream_buffer__.write(x + kwargs.get("end", "\n"))
-    return print(x, *args, **kwargs)
 
 
 def bufferize(f):
